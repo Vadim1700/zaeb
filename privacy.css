@@ -1,0 +1,54 @@
+.privacy-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    min-height: calc(100vh - 60px);
+    position: relative;
+    z-index: 10;
+    color: var(--color-white);
+    max-width: 800px;
+    width: 100%;
+}
+
+.back-link {
+    font-family: var(--font-backup);
+    font-size: 0.9rem;
+    color: #888;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+}
+.back-link:hover { color: var(--color-white); }
+
+h1 {
+    font-family: var(--font-primary);
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+    margin-bottom: 30px;
+}
+
+.privacy-text {
+    font-family: var(--font-backup);
+    line-height: 1.7;
+    font-size: 0.95rem;
+    color: #dddddd;
+}
+
+.privacy-text h2 {
+    font-family: var(--font-primary);
+    font-size: 1.2rem;
+    margin: 30px 0 15px 0;
+    color: var(--color-white);
+}
+
+.privacy-text p, .privacy-text ul, .privacy-text ol {
+    margin-bottom: 15px;
+}
+
+.privacy-text ul, .privacy-text ol {
+    padding-left: 20px;
+}
+
+.privacy-text li {
+    margin-bottom: 8px;
+}

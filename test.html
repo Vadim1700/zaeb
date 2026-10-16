@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Глубокий анимированный звездный фон</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #05021c, #000000);
+            height: 100%;
+        }
+        
+        /* Контейнеры для разных слоев глубины */
+        .layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* --- ТИПЫ ЗВЕЗД И АНИМАЦИИ --- */
+
+        /* 1. Далекие тусклые звезды (медленное мерцание) */
+        .star-distant {
+            position: absolute;
+            background-color: #ffffff;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle-distant 8s ease-in-out infinite;
+        }
+        @keyframes twinkle-distant {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* 2. Средние звезды (разноцветные, пульсируют) */
+        .star-medium {
+            position: absolute;
+            border-radius: 50%;
+            animation: pulse-color 6s linear infinite;
+        }
+        /* Цвета для средних звезд */
+        .star-medium.blue { background-color: #76d1ff; }
+        .star-medium.violet { background-color: #c78dff; }
+        .star-medium.gold { background-color: #ffd77a; }
+        @keyframes pulse-color {
+            0%, 100% { opacity: 0.6; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1.4); }
+        }
+
+        /* 3. Близкие яркие звезды (резкое мерцание) */
+        .star-bright {
+            position: absolute;
+            background-color: #ffffff;
+            box-shadow: 0 0 5px 1px #fff; /* Легкое сияние */
+            border-radius: 50%;
+            animation: flash 2s infinite;
+        }
+        @keyframes flash {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+
+        /* 4. Падающие звезды (хвосты) */
+        .shooting-star {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.8), rgba(255,255,255,0));
+            pointer-events: none;
+            animation: shoot 5s linear infinite;
+            transform: rotate(-45deg);
+        }
+        @keyframes shoot {
+            0% { 
+                transform: translate3d(0, 0, 0) rotate(-45deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translate3d(200vw, 200vh, 0) rotate(-45deg);
+                opacity: 0; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Слой 3: Задний план (самые далекие) -->
+    <div class="layer" id="layer-back"></div>
+    <!-- Слой 2: Средний план (цветные) -->
+    <div class="layer" id="layer-middle"></div>
+    <!-- Слой 1: Передний план (яркие и падающие) -->
+    <div class="layer" id="layer-front"></div>
+
+    <script>
+        const layers = {
+            back: document.getElementById('layer-back'),
+            middle: document.getElementById('layer-middle'),
+            front: document.getElementById('layer-front')
+        };
+
+        function random(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        function createDistantStars(count, layer) {
+            for(let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star-distant');
+                star.style.width = `${random(0.5, 1)}px`;
+                star.style.height = `${random(0.5, 1)}px`;
+                star.style.left = `${random(0, 100)}vw`;
+                star.style.top = `${random(0, 100)}vh`;
+                star.style.animationDelay = `${random(0, 8)}s`;
+                star.style.animationDuration = `${random(6, 10)}s`;
+                layer.appendChild(star);
+            }
+        }
+
+        function createMediumStars(count, layer) {
+            const colors = ['blue', 'violet', 'gold'];
+            for(let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star-medium', colors[Math.floor(Math.random() * colors.length)]);
+                star.style.width = `${random(1.5, 2.5)}px`;
+                star.style.height = `${random(1.5, 2.5)}px`;
+                star.style.left = `${random(0, 100)}vw`;
+                star.style.top = `${random(0, 100)}vh`;
+                star.style.animationDelay = `${random(0, 6)}s`;
+                layer.appendChild(star);
+            }
+        }
+
+        function createBrightStars(count, layer) {
+            for(let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star-bright');
+                const size = random(2, 4);
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${random(0, 100)}vw`;
+                star.style.top = `${random(0, 100)}vh`;
+                star.style.animationDelay = `${random(0, 2)}s`;
+                layer.appendChild(star);
+            }
+        }
+
+        function createShootingStars(count, layer) {
+            for(let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.classList.add('shooting-star');
+                star.style.width = `${random(80, 150)}px`;
+                star.style.height = `${random(1, 2)}px`;
+                // Случайный угол падения
+                const angle = random(-60, -30);
+                star.style.transform = `rotate(${angle}deg)`;
+                star.style.left = `${random(-50, 100)}vw`; /* Старт может быть за экраном */
+                star.style.top = `${random(-50, 100)}vh`;
+                star.style.animationDelay = `${random(0, 10)}s`;
+                star.style.animationDuration = `${random(3, 7)}s`;
+                layer.appendChild(star);
+            }
+        }
+
+        /* Распределение плотности звезд по слоям */
+        createDistantStars(150, layers.back);   /* Много тусклых */
+        createMediumStars(80, layers.middle);   /* Меньше цветных */
+        createBrightStars(40, layers.front);    /* Мало ярких */
+        createShootingStars(5, layers.front);   /* Очень мало падающих */
+    </script>
+</body>
+</html>

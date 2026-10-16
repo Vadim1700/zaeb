@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Функции - Maestro</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="functions.css">
+</head>
+<body>
+    <div class="background-animation"></div>
+    <div class="stars-overlay"></div>
+
+    <header class="header">
+        <div class="logo">
+            <div class="logo-square"></div>
+            <span>Maestro</span>
+        </div>
+        <div class="online-status">
+            <span id="current-time">--:--:--</span>
+        </div>
+    </header>
+
+    <main class="functions-content">
+        <div class="page-title"><h1>Maestro</h1></div>
+        <div class="modules-header"><h2>МОДУЛИ ДОСТУПА</h2><span class="modules-status">05 / АКТИВНЫ</span></div>
+        <div class="divider"></div>
+
+        <div class="modules-list">
+            <button class="module-btn" data-module="Поиск TG"><div class="btn-icon">1</div><div class="btn-text"><div class="btn-title">ПОИСК TG</div><div class="btn-desc">Профиль Telegram по номеру, нику или ID</div></div></button>
+            <button class="module-btn" data-module="Поиск ТТ"><div class="btn-icon">2</div><div class="btn-text"><div class="btn-title">ПОИСК ТТ</div><div class="btn-desc">Аккаунты и связи в TikTok</div></div></button>
+            <button class="module-btn" data-module="НОМЕР АВТО"><div class="btn-icon">3</div><div class="btn-text"><div class="btn-title">НОМЕР АВТО</div><div class="btn-desc">Данные по госномеру автомобиля</div></div></button>
+            <button class="module-btn" data-module="УДАЛЕНИЕ ТГ"><div class="btn-icon">4</div><div class="btn-text"><div class="btn-title">УДАЛЕНИЕ ТГ</div><div class="btn-desc">Заявка на блокировку Telegram</div></div></button>
+            <button class="module-btn" data-module="ПОИСК ПО ЛИЦУ"><div class="btn-icon">5</div><div class="btn-text"><div class="btn-title">ПОИСК ПО ЛИЦУ</div><div class="btn-desc">Идентификация личности по фотографии</div></div></button>
+        </div>
+
+        <div class="footer-home-link" onclick="window.location.href='index.html'">← На главную</div>
+    </main>
+
+    <!-- ОКНО: Отсутствует подписка -->
+    <div class="modal-overlay" id="accessModal" style="display: none;">
+        <div class="modal-window">
+            <div class="modal-header"><div class="lock-icon"></div><button class="modal-close">&times;</button></div>
+            <h3 id="modal-module-title">МОДУЛЬ "Поиск TG"</h3>
+            <p style="margin-bottom: 20px; color: #ccc;">У вас нет активной подписки.</p>
+            <p style="font-weight: bold; margin-bottom: 20px;">Этот модуль доступен только по подписке. Выберите тариф — и получите мгновенный доступ ко всем инструментам MAESTRO.</p>
+            <div class="buttons-container" style="width: 100%; gap: 10px;">
+                <button class="nav-btn" id="btn-buy-access" style="background: #3a86ff; border-color: #3a86ff;"><span>КУПИТЬ ПОДПИСКУ</span></button>
+                <button class="nav-btn" id="btn-later"><span>ПОЗЖЕ</span><span class="arrow">→</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ОКНО: Выбор тарифа -->
+    <div class="modal-overlay" id="tariffModal" style="display: none;">
+        <div class="modal-window">
+            <div class="modal-header"><button class="modal-close">&times;</button></div>
+            <h3 style="text-align: center; color: #888; margin-bottom: 10px;">ВЫБОР ТАРИФА</h3>
+            <h4 style="text-align: center;">Подписка MAESTRO</h4>
+            <p style="text-align: center; color: #aaa; margin-bottom: 25px;">Один тариф — все модули без ограничений</p>
+
+            <div class="pricing-option" data-type="7days" onclick="selectTariff(this, '7days')">
+                <div class="pricing-info"><h4>7 дней</h4><p>Полный доступ ко всем модулям на 7 дней</p></div>
+                <div class="pricing-price">299 Р</div>
+            </div>
+            <div class="pricing-option" data-type="14days" onclick="selectTariff(this, '14days')">
+                <div class="pricing-info"><h4>14 дней</h4><p>Две недели доступа + приоритетная поддержка</p></div>
+                <div style="text-align: right;"><span class="pricing-badge">ВЫГОДНО</span><div class="pricing-price">499 Р</div></div>
+            </div>
+            <div class="pricing-option" data-type="forever" onclick="selectTariff(this, 'forever')">
+                <div class="pricing-info"><h4>НАВСЕГДА</h4><p>Пожизненный доступ. Все будущие обновления включены</p></div>
+                <div class="pricing-price">2990 Р</div>
+            </div>
+
+            <div class="buttons-container" style="margin-top: 20px;">
+                <button class="nav-btn" id="btn-confirm-tariff" style="background: #3a86ff; border-color: #3a86ff; width: 100%;"><span>ОПЛАТИТЬ</span></button>
+                <button class="nav-btn" id="btn-back-from-tariff" style="width: 100%;"><span>НАЗАД</span><span class="arrow">←</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ОКНО: Выбор оплаты (НОВЫЙ ДИЗАЙН С ХЕДЕРОМ) -->
+    <div class="modal-overlay" id="paymentMethodModal" style="display: none;">
+        <div class="modal-window">
+            <!-- ФИКСИРОВАННЫЙ ХЕДЕР -->
+            <div class="payment-modal-header">
+                <div class="logo">
+                    <div class="logo-square"></div>
+                    <span>Maestro</span>
+                </div>
+                <div class="online-status">
+                    <span id="payment-current-time">--:--:--</span>
+                </div>
+            </div>
+
+            <!-- ОСНОВНОЙ КОНТЕНТ -->
+            <div class="payment-method-content">
+                <div class="payment-method-title">ВЫБОР ОПЛАТЫ MAESTRO</div>
+                <div class="payment-method-buttons">
+                    <button class="nav-btn" id="btn-pay-card"><span>Оплата картой</span><span class="arrow">→</span></button>
+                    <button class="nav-btn" id="btn-pay-crypto"><span>Оплата CRYPTOBOT</span><span class="arrow">→</span></button>
+                </div>
+               <!-- КНОПКА НАЗАД (в самом низу контента) -->
+                    <button class="btn-back-from-payment-method" id="btn-back-from-payment">
+                    <span>←</span>
+                    <span>Назад</span>
+                    </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ОКНО: Оплата картой (РФ) -->
+    <div class="modal-overlay" id="paymentCardModal" style="display: none;">
+        <div class="modal-window" style="height: 80vh; display: flex; flex-direction: column;">
+            <div class="modal-header"><button class="modal-close">&times;</button></div>
+            <div class="payment-card">
+                <h4 style="margin-bottom: 15px;">Вы выбрали оплату по Банкам РФ ✅</h4>
+                <p>• Вам выданы индивидуальные реквизиты</p>
+                <p>Переводите строго по этим реквизитам:</p>
+                <pre>Карта: 2204 3212 6409 5225
+Банк: Озон
+❗ В комментарий укажите свой ID</pre>
+                <p>Ваш ID: <strong id="user-id-display"></strong></p>
+                <p class="warning-note">⚠️ Не закрывайте это окно до подтверждения платежа.</p>
+            </div>
+            <div style="margin-top: auto; padding-top: 20px;">
+                <div class="buttons-container" style="width: 100%; gap: 10px;">
+                    <button class="nav-btn" id="btn-check-payment" style="background: #3a86ff; border-color: #3a86ff;"><span>ПРОВЕРИТЬ ОПЛАТУ</span></button>
+                    <button class="nav-btn" id="btn-back-from-card"><span>НАЗАД</span><span class="arrow">←</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- КРАСНАЯ ПЛАШКА -->
+    <div id="notification-bar" style="display: none;">
+        🎩 Увы, вы не отправили сумму в течение 5 минут. Попробуйте заново, создав новую заявку на пополнение.
+        <br>Если у вас проблемы с платежом, напишите в техническую поддержку <a href="https://t.me/Technical_helpers" target="_blank">@Technical_helpers</a> ⛑️
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('user-id-display').textContent = generateUserID();
+        let selectedTariffType = null;
+
+        function openModal(modalId) { document.getElementById(modalId).style.display = 'flex'; }
+        function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
+        function showNotification() { const bar = document.getElementById('notification-bar'); if (bar) { bar.style.display = 'block'; setTimeout(() => bar.style.display = 'none', 15000); } }
+        function openAccessModal(moduleName) { document.getElementById('modal-module-title').textContent = `МОДУЛЬ "${moduleName}"`; openModal('accessModal'); }
+
+        function selectTariff(element, type) {
+            selectedTariffType = type;
+            document.querySelectorAll('.pricing-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.module-btn').forEach(btn => btn.addEventListener('click', function() { openAccessModal(this.dataset.module); }));
+            document.getElementById('btn-buy-access').addEventListener('click', () => { closeModal('accessModal'); openModal('tariffModal'); });
+            document.getElementById('btn-later').addEventListener('click', () => closeModal('accessModal'));
+            document.getElementById('btn-confirm-tariff').addEventListener('click', () => { if (selectedTariffType) { openModal('paymentMethodModal'); } else { alert('Пожалуйста, выберите период подписки'); } });
+            document.getElementById('btn-back-from-tariff').addEventListener('click', () => { closeModal('tariffModal'); openModal('accessModal'); });
+            document.getElementById('btn-pay-card').addEventListener('click', () => { closeModal('paymentMethodModal'); openModal('paymentCardModal'); setTimeout(showNotification, 300000); });
+            document.getElementById('btn-pay-crypto').addEventListener('click', () => { 
+                const links = { '7days': 'https://t.me/send?start=IVYTXAAn2D1B', '14days': 'https://t.me/send?start=IVfbAVucNMpO', 'forever': 'https://t.me/send?start=IV7nIah3TQle' };
+                if (selectedTariffType && links[selectedTariffType]) { window.open(links[selectedTariffType], '_blank'); }
+            });
+            document.getElementById('btn-back-from-card').addEventListener('click', () => { closeModal('paymentCardModal'); openModal('paymentMethodModal'); });
+            document.getElementById('btn-check-payment').addEventListener('click', showNotification);
+            document.querySelectorAll('.modal-close').forEach(b => b.addEventListener('click', () => b.closest('.modal-overlay').style.display = 'none'));
+        });
+    </script>
+</body>
+</html>

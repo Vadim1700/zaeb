@@ -1,0 +1,567 @@
+@font-face {
+    font-family: 'Shoptronic';
+    src: url('fonts/ofont.ru_Shoptronic SP.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --font-primary: 'Shoptronic', 'Courier New', monospace;
+    --font-backup: 'Courier New', monospace;
+    --color-bg: #0a0a0a;
+    --color-white: #ffffff;
+    --color-blue-hover: #3a86ff;
+    --color-gray-border: #555555;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* --- Скрытие скроллбара (ползунка), но сохранение возможности прокрутки --- */
+
+/* 1. Для Chrome, Safari, Edge, Opera (WebKit) */
+body::-webkit-scrollbar {
+    width: 0px; /* Полностью убираем ширину */
+    background: transparent;
+}
+
+/* 2. Для Firefox */
+body {
+    scrollbar-width: none; /* Firefox */
+    overflow-y: auto; /* Важно: разрешаем саму прокрутку */
+}
+
+/* 3. Для Internet Explorer (на всякий случай) */
+body {
+    -ms-overflow-style: none;
+}
+
+/* === АНИМИРОВАННЫЙ ЗВЕЗДНЫЙ ФОН (ВМЕСТО ВИДЕО) === */
+.stars-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -100;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.star-distant {
+    position: absolute;
+    background-color: #ffffff;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: twinkle-distant 8s ease-in-out infinite;
+}
+@keyframes twinkle-distant {
+    0%, 100% { opacity: 0.2; transform: scale(0.8); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+.star-medium {
+    position: absolute;
+    border-radius: 50%;
+    animation: pulse-color 6s linear infinite;
+}
+.star-medium.blue { background-color: #76d1ff; }
+.star-medium.violet { background-color: #c78dff; }
+.star-medium.gold { background-color: #ffd77a; }
+@keyframes pulse-color {
+    0%, 100% { opacity: 0.6; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.4); }
+}
+
+.star-bright {
+    position: absolute;
+    background-color: #ffffff;
+    box-shadow: 0 0 5px 1px #fff;
+    border-radius: 50%;
+    animation: flash 2s infinite;
+}
+@keyframes flash {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
+.shooting-star {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.8), rgba(255,255,255,0));
+    pointer-events: none;
+    transform: rotate(-45deg);
+}
+.shooting-star.animate {
+    animation: shoot 12s linear infinite;
+}
+@keyframes shoot {
+    0% { 
+        transform: translate3d(0, 0, 0) rotate(-45deg);
+        opacity: 0;
+    }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { 
+        transform: translate3d(200vw, 200vh, 0) rotate(-45deg);
+        opacity: 0; 
+    }
+}
+
+/* Базовые стили страницы */
+body {
+    font-family: var(--font-backup);
+    color: var(--color-white);
+    min-height: 100vh;
+    position: relative;
+    overflow-y: auto;
+    /* Фон на случай, если JS не сработает */
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    position: relative;
+    z-index: 10;
+}
+.logo { display: flex; align-items: center; gap: 8px; font-family: var(--font-primary); font-size: 1.2rem; }
+.logo-square { width: 20px; height: 20px; background-color: var(--color-white); }
+.online-status { font-family: var(--font-backup); font-size: 0.85rem; color: var(--color-white); }
+
+/* Main Content */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    /* Полупрозрачный фон для читаемости поверх звезд */
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+}
+.hero-title h1 { font-family: var(--font-primary); font-size: clamp(2.5rem, 10vw, 4rem); margin-bottom: 10px; }
+.hero-title p { font-size: clamp(0.9rem, 2.5vw, 1.2rem); color: #aaaaaa; }
+
+/* Feature Card */
+.feature-card {
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    padding: 20px 20px;
+    margin: 20px 0;
+    border: 1px solid var(--color-gray-border);
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.card-corner { position: absolute; width: 25px; height: 25px; border: 1px solid var(--color-white); }
+.card-corner.top-left { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+.card-corner.bottom-right { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+.card-header { font-family: var(--font-backup); font-size: 0.75rem; color: #888; align-self: flex-start; }
+.card-body p { line-height: 1.4; font-size: clamp(0.85rem, 2.5vw, 1rem); }
+.card-divider { height: 1.5px; background-color: var(--color-white); width: 100%; }
+
+/* Buttons */
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 350px;
+    gap: 12px;
+}
+.nav-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 14px 18px;
+    background: transparent;
+    border: 1px solid #333;
+    color: var(--color-white);
+    font-family: var(--font-backup);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.2s;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+.nav-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    z-index: 1;
+    transition: background 0.3s;
+    opacity: 0;
+}
+.nav-btn:hover::before { opacity: 1; }
+.nav-btn:hover { background-color: transparent; color: var(--color-white); border-color: #555; transform: translateY(-2px); }
+.arrow { font-size: 1.1rem; z-index: 2; position: relative; }
+
+/* Footer link */
+.footer-text { margin-top: 30px; }
+.privacy-link {
+    font-family: var(--font-backup);
+    font-size: 0.9rem;
+    color: #777;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.privacy-link:hover { color: var(--color-blue-hover); }
+
+/* Красная плашка уведомления */
+#notification-bar {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(220, 53, 69, 0.95);
+    color: white;
+    padding: 18px 25px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    z-index: 200;
+    display: none;
+    animation: fadeInOut 15s forwards;
+    max-width: 90%;
+    text-align:center;
+    line-height: 1.4;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+#notification-bar a {
+    color: #3a86ff;
+    text-decoration: none;
+    font-weight: bold;
+}
+@keyframes fadeInOut {
+    0%, 90%, 100% { opacity: 0; }
+    10%, 80% { opacity: 1; }
+}
+
+/* Модальные окна */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 100;
+    padding-bottom: 20px;
+}
+.modal-window {
+    background: #121212;
+    width: 95%;
+    max-width: 500px;
+    border: 1px solid #333;
+    border-radius: 15px 15px 0 0;
+    padding: 20px;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+    animation: slideUp 0.3s ease-out;
+}
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.modal-close {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+.lock-icon {
+    width: 30px;
+    height: 30px;
+    background: #0a0a0a;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+.lock-icon::after { content: '🔒'; font-size: 18px; }
+
+/* Кнопки тарифов */
+.pricing-option {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.3s;
+}
+.pricing-option:hover { border-color: #555; }
+.pricing-info h4 { margin: 0 0 5px 0; }
+.pricing-info p { margin: 0; font-size: 0.9rem; color: #aaa; }
+.pricing-badge {
+    background: var(--color-white);
+    color: var(--color-bg);
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+.pricing-price { font-weight: bold; font-size: 1.1rem; }
+
+/* Оплата картой */
+.payment-card {
+    padding: 20px;
+    text-align: left;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+.payment-card pre {
+    background: #000;
+    color: #0f0;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    border: 1px solid #333;
+}
+.warning-note {
+    font-size: 0.8rem;
+    color: #ff6b6b;
+    margin-top: 10px;
+}
+
+/* Адаптивность */
+@media (min-width: 768px) {
+    .main-content { padding: 40px 20px; }
+}
+
+/* Подсветка выбранного тарифа */
+.pricing-option.selected {
+    border-color: #3a86ff !important;
+    background: #1a2a3a !important;
+    box-shadow: 0 0 15px rgba(58, 134, 255, 0.3);
+}
+.pricing-option.selected .pricing-price {
+    color: #3a86ff;
+}
+
+/* === ОКНО: ВЫБОР ОПЛАТЫ (ФИНАЛЬНЫЙ ДИЗАЙН) === */
+.modal-overlay#paymentMethodModal .modal-window {
+    border-radius: 0; 
+    height: 100vh; 
+    width: 100%; 
+    max-width: 100%; 
+    margin: 0; 
+    padding: 0; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: flex-start; 
+    padding-top: 60px; 
+    box-sizing: border-box;
+    background: var(--color-bg);
+}
+
+.payment-modal-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: #0a0a0a;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    z-index: 10;
+}
+.payment-modal-header .header-left {
+    font-family: var(--font-primary);
+    font-size: 1.2rem;
+    color: var(--color-white);
+}
+.payment-modal-header .header-right {
+    font-family: var(--font-backup);
+    font-size: 0.85rem;
+    color: var(--color-white);
+}
+
+.payment-method-content {
+    margin-top: 20px;
+    padding: 0 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+}
+
+.payment-method-subtitle {
+    font-family: var(--font-backup);
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.payment-method-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+}
+
+.btn-back-from-payment-method { 
+    font-family: var(--font-backup); 
+    font-size: 0.9rem; 
+    color: #777; 
+    cursor: pointer; 
+    background: none; 
+    border: none; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    width: 100%; 
+    padding: 15px 0; 
+    margin-top: 20px;
+    transition: color 0.2s;
+}
+.btn-back-from-payment-method:hover { 
+    color: var(--color-white); 
+}
+.btn-back-from-payment-method span:first-child {
+    margin-right: 5px;
+}
+
+/* === ОКНО: ОПЛАТА КАРТОЙ === */
+#paymentCardModal .modal-window {
+    height: 80vh; 
+    display: flex; 
+    flex-direction: column; 
+    padding-bottom: 30px; 
+}
+
+.payment-card { 
+    padding: 20px; 
+    text-align: left; 
+    flex-grow: 1; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+#btn-back-from-card { 
+    font-family: var(--font-backup); 
+    font-size: 0.9rem; 
+    color: #777; 
+    cursor: pointer; 
+    background: none; 
+    border: 1px solid #333; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    width: 100%; 
+    padding: 15px 0; 
+    margin-top: auto; 
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s; 
+    border-radius: 8px; 
+}
+#btn-back-from-card:hover { 
+    background-color: #333; 
+    color: var(--color-white); 
+    border-color: var(--color-white); 
+}
+
+/* --- КНОПКИ ФУНКЦИОНАЛА (мягкая подсветка) --- */
+.module-btn {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    padding: 18px;
+    background: transparent;
+    border: 1px solid #333;
+    color: var(--color-white);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.2s;
+    gap: 15px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+.module-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    z-index: 1;
+    transition: background 0.3s;
+    opacity: 0;
+}
+.module-btn:hover::before {
+    opacity: 1;
+}
+.module-btn:hover {
+    background-color: transparent;
+    color: var(--color-white);
+    border-color: #555;
+    transform: translateY(-2px);
+}
+
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #555;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-backup);
+    font-size: 1rem;
+    flex-shrink: 0;
+    background: transparent;
+    color: var(--color-white);
+    z-index: 2;
+    position: relative;
+}

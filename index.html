@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maestro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ЗВЕЗДНЫЙ ФОН (перемещен в самое начало) -->
+    <div class="stars-layer" id="stars-layer"></div>
+
+    <header class="header">
+        <div class="logo">
+            <div class="logo-square"></div>
+            <span>Maestro</span>
+        </div>
+        <div class="online-status">
+            <span id="current-time">--:--:--</span>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="hero-title">
+            <h1>Maestro</h1>
+            <p>Что-то большее, чем просто Telegram бот.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="card-corner top-left"></div>
+            <div class="card-corner bottom-right"></div>
+            <div class="card-header">01 / 12</div>
+            <div class="card-body">
+                <p>Цифровая тень есть у каждого — мы умеем читать её без остатка.</p>
+                <div class="card-divider"></div>
+            </div>
+        </div>
+
+        <div class="buttons-container">
+            <button class="nav-btn" onclick="window.location.href='functions.html'">
+                <span>ФУНКЦИИ</span>
+                <span class="arrow">→</span>
+            </button>
+            <button class="nav-btn" onclick="window.location.href='reviews.html'">
+                <span>ОТЗЫВЫ</span>
+                <span class="arrow">→</span>
+            </button>
+        </div>
+
+        <div class="footer-text">
+            <a href="privacy.html" class="privacy-link">политика конфиденциальности</a>
+        </div>
+    </main>
+
+    <!-- КРАСНАЯ ПЛАШКА -->
+    <div id="notification-bar" style="display: none;">
+        🎩 Увы, вы не отправили сумму в течение 5 минут. Попробуйте заново, создав новую заявку на пополнение.
+        <br>Если у вас проблемы с платежом, напишите в техническую поддержку <a href="https://t.me/Technical_helpers" target="_blank">@Technical_helpers</a> ⛑️
+    </div>
+
+    <!-- МОДАЛЬНЫЕ ОКНА -->
+    <div class="modal-overlay" id="accessModal" style="display: none;">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3>Доступ к модулю закрыт</h3>
+                <button class="modal-close" onclick="closeModal('accessModal')">×</button>
+            </div>
+            <div class="modal-body" style="text-align: center; padding: 20px;">
+                <div style="font-size: 3rem; margin-bottom: 15px;">🔒</div>
+                <p style="font-size: 1.1rem; margin-bottom: 20px;">Для использования этого раздела требуется активная подписка.</p>
+                <p id="modal-module-title" style="font-weight: bold; color: #3a86ff;"></p>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; padding-top: 10px;">
+                <button id="btn-later" style="flex: 1; margin-right: 10px; padding: 12px; background: #333; border: 1px solid #555; color: white;">Позже</button>
+                <button id="btn-buy-access" style="flex: 1; padding: 12px; background: #3a86ff; border: none; color: white;">Купить доступ</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="tariffModal" style="display: none;">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3>Выберите период</h3>
+                <button class="modal-close" onclick="closeModal('tariffModal')">×</button>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <div class="pricing-option" onclick="selectTariff(this, '7days')">
+                    <div class="pricing-info">
+                        <h4>7 дней</h4>
+                        <p>Полный доступ ко всем модулям</p>
+                    </div>
+                    <div class="pricing-price">350 ₽</div>
+                </div>
+                <div class="pricing-option" onclick="selectTariff(this, '14days')">
+                    <div class="pricing-info">
+                        <h4>14 дней</h4>
+                        <p>Полный доступ ко всем модулям</p>
+                    </div>
+                    <div class="pricing-price">600 ₽</div>
+                </div>
+                <div class="pricing-option" onclick="selectTariff(this, 'forever')">
+                    <div class="pricing-info">
+                        <h4>Навсегда</h4>
+                        <p>Бессрочный доступ</p>
+                    </div>
+                    <div class="pricing-price">1500 ₽</div>
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; padding-top: 10px;">
+                <button id="btn-back-from-tariff" style="flex: 1; margin-right: 10px; padding: 12px; background: #333; border: 1px solid #555; color: white;">Назад</button>
+                <button id="btn-confirm-tariff" style="flex: 1; padding: 12px; background: #3a86ff; border: none; color: white;">Далее</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="paymentMethodModal" style="display: none;">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3>Выберите способ оплаты</h3>
+                <button class="modal-close" onclick="closeModal('paymentMethodModal')">×</button>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <div class="payment-method-buttons">
+                    <button style="padding: 15px; margin-bottom: 10px; background: #333; border: 1px solid #555; color: white; width: 100%; text-align: left;" id="btn-pay-card">
+                        <span>💳 Банковская карта</span>
+                        <span style="float: right;">→</span>
+                    </button>
+                    <button style="padding: 15px; background: #333; border: 1px solid #555; color: white; width: 100%; text-align: left;" id="btn-pay-crypto">
+                        <span>₿ Криптовалюта (Telegram Pay)</span>
+                        <span style="float: right;">→</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding-top: 10px;">
+                <button id="btn-back-from-payment" style="width: 100%; padding: 12px; background: transparent; border: 1px solid #555; color: #777;">← Назад</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="paymentCardModal" style="display: none;">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3>Оплата картой</h3>
+                <button class="modal-close" onclick="closeModal('paymentCardModal')">×</button>
+            </div>
+            <div class="payment-card">
+                <div style="padding: 0 20px 20px;">
+                    <p style="font-size: 0.85rem; color: #888;">Ваш ID для оплаты:</p>
+                    <p style="font-family: 'Courier New', monospace; font-size: 0.9rem; background: #000; padding: 10px; border-radius: 6px;" id="user-id-display">--</p>
+                </div>
+                <div style="padding: 0 20px 20px;">
+                    <p style="font-size: 0.85rem; color: #ff6b6b;">⚠️ ВАЖНО: В комментарии к платежу НЕ НИЧЕГО НЕ ПИШИТЕ.</p>
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; padding-top: 10px;">
+                <button id="btn-back-from-card" style="flex: 1; margin-right: 10px; padding: 12px; background: #333; border: 1px solid #555; color: white;">← Назад</button>
+                <button id="btn-check-payment" style="flex: 1; padding: 12px; background: #3a86ff; border: none; color: white;">Я оплатил</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ПОДКЛЮЧЕНИЕ СКРИПТА (дублирующий inline-script удален) -->
+    <script src="script.js"></script>
+
+</body>
+</html>
